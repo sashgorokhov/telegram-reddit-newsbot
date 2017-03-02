@@ -4,6 +4,8 @@ SUBREDDITS = dict()
 
 REDIS_URL = None
 TOKEN = None
+IMGUR_CLIENT_ID = None
+
 
 POST_EXPIRE = datetime.timedelta(days=7).total_seconds()
 
