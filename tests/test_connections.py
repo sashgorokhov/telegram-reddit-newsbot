@@ -1,7 +1,7 @@
 import pytest
 
-import utils
 from newsbot import connections
+from tests import utils
 
 
 @pytest.mark.asyncio
