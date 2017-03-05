@@ -1,6 +1,5 @@
 import asyncio
 import os
-from datetime import timedelta
 
 
 def main():
@@ -19,11 +18,11 @@ def main():
         else:
             setattr(settings, key.upper(), value)
 
-    from newsbot import server, utils, services
+    from newsbot import server, services
 
     loop = asyncio.get_event_loop()
-    loop.create_task(utils.scheduler([services.gather_posts], period=timedelta(minutes=10)))
-    loop.create_task(utils.scheduler([services.process_queue], period=timedelta(seconds=1)))
+    loop.create_task(services.gather_posts_loop)
+    loop.create_task(services.process_posts_queue_loop)
 
     return server.run_server(loop=loop)
 
