@@ -1,6 +1,3 @@
-import datetime
-from unittest import mock
-
 import pytest
 from aiocontext import async_contextmanager
 
@@ -42,20 +39,3 @@ async def test_json_queue_empty():
     async with json_queue() as queue:
         assert await queue.size() == 0
         assert await queue.empty()
-
-
-@pytest.mark.asyncio
-async def test_scheduler():
-    mock_function = mock.Mock()
-    count = 0
-
-    async def test():
-        nonlocal count
-        if count == 3:
-            raise utils.StopScheduler()
-        count += 1
-        mock_function()
-
-    await utils.scheduler([test], period=datetime.timedelta(milliseconds=1))
-
-    assert mock_function.call_count == count

@@ -1,6 +1,9 @@
 language: python
 cache: pip
 
+services:
+  - redis-server
+
 python:
   - "3.6"
 
