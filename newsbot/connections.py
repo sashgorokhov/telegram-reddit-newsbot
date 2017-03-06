@@ -7,6 +7,8 @@ import aioredis
 from newsbot import settings, utils
 
 _redis = None
+_reddit_session = None
+_imgur_session = None
 
 
 async def get_redis(address=settings.REDIS_URL, loop=None, recreate=False) -> aioredis.Redis:
@@ -78,7 +80,9 @@ class ImgurSession(aiohttp.ClientSession):
                 yield image
         else:
             image_id = os.path.splitext(split_result.path[1:])[0]
-            yield self.get_imgur_image(image_id)
+            image = await self.get_imgur_image(image_id)
+            if image:
+                yield image
 
     async def get_imgur_image(self, image_id):
         async with self.get('https://api.imgur.com/3/image/' + image_id) as response:
@@ -94,3 +98,17 @@ class ImgurSession(aiohttp.ClientSession):
             return
         for image in album.get('data', {}).get('images', []):
             yield image
+
+
+def get_reddit_session() -> RedditSession:
+    global _reddit_session
+    if not _reddit_session:
+        _reddit_session = RedditSession()
+    return _reddit_session
+
+
+def get_imgur_session() -> ImgurSession:
+    global _imgur_session
+    if not _imgur_session:
+        _imgur_session = ImgurSession()
+    return _imgur_session

@@ -48,8 +48,25 @@ def session_get_mock(response):
 def post(**kwargs):
     data = {
         'data': {
-            'id': str(uuid.uuid4()).split('-')[0]
+            'id': str(uuid.uuid4()).split('-')[0],
+            'url': 'http://reddit.com/test.jpg',
+            'ups': 666,
+            'title': 'This is test',
+            'author': 'test',
+            'permalink': '/r/test',
+            'subreddit': '/r/test',
+            'domain': 'foo.com'
         }
+    }
+    data['data'].update(kwargs)
+    return data
+
+
+def imgur_image(**kwargs):
+    data = {
+        'description': 'Test',
+        'type': 'image/jpeg',
+        'link': 'http://example.com/test.jpg'
     }
     data.update(kwargs)
     return data

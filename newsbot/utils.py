@@ -22,6 +22,10 @@ class RedisQueue(object):
         data = await self.redis.rpop(self.key)
         return self._decode(data)
 
+    async def insert(self, item):
+        data = self._encode(item)
+        return await self.redis.rpush(self.key, data)
+
     async def put(self, item):
         data = self._encode(item)
         return await self.redis.lpush(self.key, data)
@@ -41,6 +45,9 @@ class RedisQueue(object):
 
     async def empty(self):
         return await self.size() == 0
+
+    async def clear(self):
+        return await self.redis.delete(self.key)
 
 
 class JsonRedisQueue(RedisQueue):
