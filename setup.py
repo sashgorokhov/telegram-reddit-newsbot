@@ -10,7 +10,7 @@ try:
 except(IOError, ImportError):
     long_description = long_description
 
-VERSION = '0.1'
+VERSION = '0.2'
 
 setup(
     name='telegram-reddit-newsbot',
@@ -20,7 +20,7 @@ setup(
     download_url='https://github.com/sashgorokhov/telegram-reddit-newsbot/archive/v%s.zip' % VERSION,
     keywords=['python', 'asyncio', 'telegram', 'bot', 'reddit'],
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 3 - Alpha',
         'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',

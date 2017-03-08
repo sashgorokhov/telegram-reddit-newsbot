@@ -1,2 +1,3 @@
 from newsbot.main import main
-main()
+
+main()  # pragma: no cover

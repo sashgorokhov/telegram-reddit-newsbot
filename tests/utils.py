@@ -1,70 +1,34 @@
-import asyncio
-import json
 import uuid
-from unittest import mock
 
-import aiohttp
-from aiocontext import async_contextmanager
-from aiohttp import helpers
-from yarl import URL
+from tests import aiohttp_utils
 
 
-def create_response(data):
-    response = aiohttp.ClientResponse('get', URL('http://reddit.com/.json'))
-    response.headers = {'Content-Type': 'application/json'}
-
-    def side_effect(*args, **kwargs):
-        fut = helpers.create_future(asyncio.get_event_loop())
-        fut.set_result(json.dumps(data).encode())
-        return fut
-
-    content = response.content = mock.Mock()
-    content.read.side_effect = side_effect
-
-    return response
-
-
-def create_reddit_response(*posts):
+def create_reddit_response(method, url, *posts):
     data = {
         'data': {
-            'children': posts
+            'children': [i if 'data' in i else {'data': i} for i in posts]
         }
     }
-    return create_response(data)
+    return aiohttp_utils.create_json_response(method, url, data)
 
 
-def session_get_mock(response):
-    # get_mock = mock.Mock()
-
-    @async_contextmanager
-    async def get_response(*args, **kwargs):
-        yield response
-
-    # get_mock.return_value = get_response
-    # return get_mock
-    return get_response
-
-
-def post(**kwargs):
+def reddit_post(**kwargs):
     data = {
-        'data': {
-            'id': str(uuid.uuid4()).split('-')[0],
-            'url': 'http://reddit.com/test.jpg',
-            'ups': 666,
-            'title': 'This is test',
-            'author': 'test',
-            'permalink': '/r/test',
-            'subreddit': '/r/test',
-            'domain': 'foo.com'
-        }
+        'id': str(uuid.uuid4()).split('-')[0],
+        'url': 'http://reddit.com/test.jpg',
+        'ups': 666,
+        'title': 'This is test',
+        'author': 'test',
+        'permalink': '/r/test',
+        'subreddit': '/r/test',
+        'domain': 'foo.com'
     }
-    data['data'].update(kwargs)
+    data.update(kwargs)
     return data
 
 
 def imgur_image(**kwargs):
     data = {
-        'description': 'Test',
         'type': 'image/jpeg',
         'link': 'http://example.com/test.jpg'
     }
@@ -77,3 +41,39 @@ async def list_async_gen(async_gen):
     async for item in async_gen:
         items.append(item)
     return items
+
+
+def make_async_gen(*result, mock=None):
+    async def wrapper(*args, **kwargs):
+        if mock:
+            if result:
+                mock(*args, **kwargs)
+            else:
+                yield mock(*args, **kwargs)
+        for r in result:
+            yield r
+
+    return wrapper
+
+
+def make_coro(result=None, mock=None):
+    async def wrapper(*args, **kwargs):
+        if mock:
+            if result:
+                mock(*args, **kwargs)
+            else:
+                return mock(*args, **kwargs)
+        if not callable(result):
+            return result
+        else:
+            return result(*args, **kwargs)
+
+    return wrapper
+
+
+def default_reddit_response(session, *posts):
+    subreddit = '/r/test'
+    charts = ['hot']
+    url = session._build_url(subreddit + '/' + charts[0])
+    response = create_reddit_response('get', url, *posts)
+    return response, subreddit, charts, url
