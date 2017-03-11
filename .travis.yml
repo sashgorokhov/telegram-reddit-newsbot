@@ -24,7 +24,7 @@ before_deploy:
 
 deploy:
   provider: pypi
-  user: $PYPI_USERNMAE
+  user: $PYPI_USERNAME
   password: $PYPI_PASSWORD
   on:
     tags: true
