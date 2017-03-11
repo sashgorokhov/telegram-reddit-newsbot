@@ -205,3 +205,22 @@ async def test_process_messages():
             await services.process_messages()
 
     assert not len(messages_queue.queue)
+
+
+@pytest.mark.asyncio
+async def test_process_messages_too_many_requests():
+    post = utils.reddit_post()
+    messages = services.process_reddit_post(post)
+    messages_queue = MockQueue([json.dumps(messages)])
+
+    telegram_session = connections.get_telegram_session()
+
+    with mock.patch('newsbot.queues.messages_queue') as messages_queue_patch:
+        messages_queue_patch.side_effect = utils.make_coro(messages_queue)
+
+        with mock.patch.object(telegram_session, 'process_message') as process_message_mock:
+            process_message_mock.side_effect = utils.make_coro(connections.TelegramTooManyRequests())
+            await services.process_messages()
+
+    assert await messages_queue.size() == 1
+    assert await messages_queue.get() == messages

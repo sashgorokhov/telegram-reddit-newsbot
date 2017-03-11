@@ -5,7 +5,7 @@ import time
 from newsbot import settings, queues, connections
 
 logger = logging.getLogger(__name__)
-
+print(__name__)
 
 async def filter_post(post, redis=None):
     redis = redis or await connections.get_redis()
@@ -160,7 +160,7 @@ async def process_messages():
                 logger.debug(str(response))
         except connections.TelegramTooManyRequests as e:
             logger.warning('Got Too Many Requests, retrying in %s' % e.retry_after)
-            messages_queue.insert([message] + messages)
+            await messages_queue.insert([message] + messages)
             return await asyncio.sleep(e.retry_after)
         except:
             logger.exception('Error while sending %s' % message)

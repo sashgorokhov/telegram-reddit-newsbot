@@ -63,7 +63,9 @@ def make_coro(result=None, mock=None):
                 mock(*args, **kwargs)
             else:
                 return mock(*args, **kwargs)
-        if not callable(result):
+        if isinstance(result, Exception):
+            raise result
+        elif not callable(result):
             return result
         else:
             return result(*args, **kwargs)

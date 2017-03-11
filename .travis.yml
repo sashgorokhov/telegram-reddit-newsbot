@@ -15,3 +15,14 @@ script:
 
 after_success:
   - codecov
+
+before_deploy:
+  - apt-get install -y pandoc
+  - pip install pypandoc
+
+deploy:
+  provider: pypi
+  user: $PYPI_USERNMAE
+  password: $PYPI_PASSWORD
+  on:
+    tags: true

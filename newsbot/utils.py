@@ -2,7 +2,6 @@ import json
 from urllib import parse
 
 import aioredis
-from aiocontext import async_contextmanager
 
 
 class StopScheduler(Exception):
@@ -56,15 +55,6 @@ class JsonRedisQueue(RedisQueue):
 
     def _decode(self, data):
         return json.loads(data)
-
-
-@async_contextmanager
-async def maybe(obj, func, *args, **kwargs):
-    if obj is None:
-        async with func(*args, **kwargs) as obj:
-            yield obj
-    else:
-        yield obj
 
 
 def parse_redis_url(redis_url):  # pragma: no cover

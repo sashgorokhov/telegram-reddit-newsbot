@@ -1,25 +1,8 @@
-import asyncio
 from unittest import mock
 
 import pytest
 
-from newsbot import connections
 from tests import utils, aiohttp_utils
-
-
-@pytest.fixture
-def imgur_session(event_loop):
-    async def get_imgur_session():
-        return connections.ImgurSession(imgur_client_id='Test')
-
-    async def close_imgur_session(session):
-        await session.close()
-
-    session = event_loop.run_until_complete(asyncio.ensure_future(get_imgur_session()))
-    try:
-        yield session
-    finally:
-        event_loop.run_until_complete(asyncio.ensure_future(close_imgur_session(session)))
 
 
 def default_imgur_response(url, *images, **kwargs):

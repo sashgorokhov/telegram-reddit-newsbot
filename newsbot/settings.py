@@ -6,7 +6,9 @@ def configure_logging():
 
     logger = logging.getLogger('newsbot')
     logger.setLevel(logging.DEBUG)
+
     formatter = logging.Formatter('%(asctime)s [%(name)s:%(funcName)s] [%(levelname)s] %(message)s')
+
     stream_handler = logging.StreamHandler()
     stream_handler.setFormatter(formatter)
     stream_handler.setLevel(logging.DEBUG)

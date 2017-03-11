@@ -93,7 +93,7 @@ class ImgurSession(aiohttp.ClientSession):
         async with self.get('https://api.imgur.com/3/image/' + image_id) as response:
             image = await response.json()
         if not image.get('success', False):
-            logging.error('Imgur response on %s is not success\n%s' % (image_id, image))
+            logger.error('Imgur response on %s is not success\n%s' % (image_id, image))
             return
         return image.get('data', None)
 
@@ -101,7 +101,7 @@ class ImgurSession(aiohttp.ClientSession):
         async with self.get('https://api.imgur.com/3/album/' + album_id) as response:
             album = await response.json()
         if not album.get('success', False):
-            logging.error('Imgur response on %s is not success\n%s' % (album_id, album))
+            logger.error('Imgur response on %s is not success\n%s' % (album_id, album))
             return
         for image in album.get('data', {}).get('images', []):
             yield image

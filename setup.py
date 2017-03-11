@@ -10,7 +10,7 @@ try:
 except(IOError, ImportError):
     long_description = long_description
 
-VERSION = '0.2'
+VERSION = '0.3'
 
 setup(
     name='telegram-reddit-newsbot',
