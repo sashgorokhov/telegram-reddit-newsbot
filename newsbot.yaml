@@ -1,0 +1,22 @@
+telegram:
+  token: foo
+  chat_id: "@general"
+
+imgur:
+  client_id: foo
+
+redis: redis://localhost:6379/0
+
+timings: # all values are seconds
+  gather_posts: ${60*10}
+  process_posts: 1
+  process_messages: 1
+  post_expire: ${60*60*24*7}
+
+subreddits:
+  /r/python:
+    pages: 2
+    charts:
+      - top
+      - hot
+    chat_id: "@special"

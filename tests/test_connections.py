@@ -1,7 +1,6 @@
 import pytest
 
 from newsbot import connections
-from newsbot import settings
 
 
 @pytest.mark.asyncio
@@ -25,6 +24,5 @@ async def test_telegram_same_session():
 
 @pytest.mark.asyncio
 async def test_imgur_same_session():
-    settings.IMGUR_CLIENT_ID = ''
     session = connections.get_imgur_session()
     assert connections.get_imgur_session() is session

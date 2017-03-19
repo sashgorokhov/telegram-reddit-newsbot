@@ -1,0 +1,1 @@
+worker: python -m newsbot --noserver --config heroku.yaml

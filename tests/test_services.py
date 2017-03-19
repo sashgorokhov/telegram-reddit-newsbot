@@ -29,8 +29,6 @@ def test_process_reddit_post():
 
 @pytest.mark.asyncio
 async def test_process_imgur_post_image_jpeg():
-    settings.IMGUR_CLIENT_ID = 'Foo'
-
     post = utils.reddit_post(url='http://imgur.com/test')
 
     images = [utils.imgur_image()]
@@ -48,8 +46,6 @@ async def test_process_imgur_post_image_jpeg():
 
 @pytest.mark.asyncio
 async def test_process_imgur_post_image_gif():
-    settings.IMGUR_CLIENT_ID = 'Foo'
-
     post = utils.reddit_post(url='http://imgur.com/test')
 
     images = [utils.imgur_image(type='image/gif')]
@@ -67,8 +63,6 @@ async def test_process_imgur_post_image_gif():
 
 @pytest.mark.asyncio
 async def test_process_imgur_post_image_gif_video():
-    settings.IMGUR_CLIENT_ID = 'Foo'
-
     post = utils.reddit_post(url='http://imgur.com/test')
 
     images = [utils.imgur_image(type='image/gif', mp4='http://example.com/video.mp4')]
@@ -86,8 +80,6 @@ async def test_process_imgur_post_image_gif_video():
 
 @pytest.mark.asyncio
 async def test_process_imgur_post_image_unknown_type():
-    settings.IMGUR_CLIENT_ID = 'Foo'
-
     post = utils.reddit_post(url='http://imgur.com/test')
 
     images = [utils.imgur_image(type='image/ktulhu', description='Undescriptible horror')]
@@ -171,7 +163,7 @@ async def test_process_posts():
 async def test_gather_posts(reddit_session):
     posts = [utils.reddit_post()]
     posts_queue = MockQueue()
-    settings.SUBREDDITS = {'/r/test': {}}
+    settings.CONFIG['subreddits'] = {'/r/test': {}}
 
     with mock.patch('newsbot.queues.posts_queue') as posts_queue_patch:
         posts_queue_patch.side_effect = utils.make_coro(posts_queue)

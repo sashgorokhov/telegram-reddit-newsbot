@@ -15,8 +15,9 @@ _telegram_session = None
 logger = logging.getLogger(__name__)
 
 
-async def get_redis(address=settings.REDIS_URL, loop=None, recreate=False) -> aioredis.Redis:
+async def get_redis(address=None, loop=None, recreate=False) -> aioredis.Redis:
     global _redis
+    address = address or settings.CONFIG['redis']
     kwargs = utils.parse_redis_url(address)
     kwargs['address'] = kwargs.pop('host'), kwargs.pop('port')
     if not _redis or recreate:
@@ -70,7 +71,7 @@ class RedditSession(aiohttp.ClientSession):
 
 class ImgurSession(aiohttp.ClientSession):
     def __init__(self, *args, **kwargs):
-        imgur_client_id = kwargs.pop('imgur_client_id', settings.IMGUR_CLIENT_ID)
+        imgur_client_id = kwargs.pop('imgur_client_id', settings.CONFIG['imgur']['client_id'])
         kwargs.setdefault('headers', dict())
         kwargs['headers'].setdefault('Authorization', 'Client-ID ' + imgur_client_id)
         kwargs['headers'].setdefault('User-Agent', settings.USER_AGENT)
@@ -138,8 +139,7 @@ class TelegramTooManyRequests(aiohttp.HttpProcessingError):
 
 class TelegramSession(aiohttp.ClientSession):
     def __init__(self, *args, **kwargs):
-        self.token = kwargs.pop('token', settings.TOKEN)
-        self.chat_id = kwargs.pop('chat_id', settings.CHAT_ID)
+        self.token = kwargs.pop('token', settings.CONFIG['telegram']['token'])
         kwargs.setdefault('headers', dict())
         kwargs['headers'].setdefault('User-Agent', settings.USER_AGENT)
         # noinspection PyArgumentList
@@ -154,16 +154,16 @@ class TelegramSession(aiohttp.ClientSession):
         return json_body
 
     async def send_message(self, text, **kwargs):
-        return await self.send('sendMessage', data={'chat_id': self.chat_id, 'text': text, **kwargs})
+        return await self.send('sendMessage', data={'text': text, **kwargs})
 
     async def send_photo(self, photo, **kwargs):
-        return await self.send('sendPhoto', data={'chat_id': self.chat_id, 'photo': photo, **kwargs})
+        return await self.send('sendPhoto', data={'photo': photo, **kwargs})
 
     async def send_document(self, document, **kwargs):
-        return await self.send('sendDocument', data={'chat_id': self.chat_id, 'document': document, **kwargs})
+        return await self.send('sendDocument', data={'document': document, **kwargs})
 
     async def send_video(self, video, **kwargs):
-        return await self.send('sendVideo', data={'chat_id': self.chat_id, 'video': video, **kwargs})
+        return await self.send('sendVideo', data={'video': video, **kwargs})
 
     async def process_message(self, message):
         return await getattr(self, 'send_' + message['type'])(**message['params'])

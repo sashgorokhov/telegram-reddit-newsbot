@@ -1,4 +1,14 @@
-import datetime
+import os
+
+import metayaml
+
+CONFIG = None
+
+
+def read_config(filename=None):
+    filename = filename or os.environ.get('NEWSBOT_CONFIG',
+                                          os.path.join(os.path.dirname(os.path.dirname(__file__)), 'newsbot.yaml'))
+    return metayaml.read(filename)
 
 
 def configure_logging():
@@ -20,18 +30,6 @@ configure_logging()
 
 del configure_logging
 
-SUBREDDITS = dict()
-
-REDIS_URL = 'redis://localhost:6379/0'
-TOKEN = None
-IMGUR_CLIENT_ID = None
-CHAT_ID = None
-
 USER_AGENT = 'Python reddit newsbot'
-GATHER_POSTS_INTERVAL = round(datetime.timedelta(minutes=10).total_seconds())
-PROCESS_POSTS_INTERVAL = 1
-PROCESS_MESSAGES_INTERVAL = 1
-POST_EXPIRE = round(datetime.timedelta(days=7).total_seconds())
-
 POSTS_QUEUE_KEY = 'posts_queue'
 MESSAGES_QUEUE_KEY = 'messages_queue'

@@ -2,7 +2,9 @@ import asyncio
 
 import pytest
 
-from newsbot import connections
+from newsbot import connections, settings
+
+settings.CONFIG = settings.read_config()
 
 
 @pytest.fixture
@@ -38,7 +40,7 @@ def imgur_session(event_loop):
 @pytest.fixture
 def telegram_session(event_loop):
     async def get_telegram_session():
-        return connections.TelegramSession(token='test', chat_id='test')
+        return connections.TelegramSession(token='test')
 
     async def close_telegram_session(session):
         await session.close()
