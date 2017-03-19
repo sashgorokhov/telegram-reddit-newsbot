@@ -105,7 +105,7 @@ async def process_imgur_post(post):
             kwargs['caption'] = image['description'][:200]
         if image['type'] == 'image/jpeg':
             messages.append({'type': 'photo', 'params': {'photo': image['link'], **kwargs}})
-        if image['type'] == 'image/png':
+        elif image['type'] == 'image/png':
             messages.append({'type': 'photo', 'params': {'photo': image['link'], **kwargs}})
         elif image['type'] == 'image/gif':
             if 'mp4' in image:
