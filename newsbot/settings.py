@@ -8,7 +8,7 @@ CONFIG = None
 def read_config(filename=None):
     filename = filename or os.environ.get('NEWSBOT_CONFIG',
                                           os.path.join(os.path.dirname(os.path.dirname(__file__)), 'newsbot.yaml'))
-    return metayaml.read(filename)
+    return metayaml.read(filename, disable_order_dict=True, defaults={'env': os.environ})
 
 
 def configure_logging():

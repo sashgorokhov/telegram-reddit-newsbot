@@ -1,0 +1,33 @@
+telegram:
+  token: ${env['TELEGRAM_TOKEN']}
+
+imgur:
+  client_id: ${env['IMGUR_CLIENT_ID']}
+
+redis: ${env.get('REDIS_URL', 'redis://localhost:6379/0')}
+
+timings: # all values are seconds
+  gather_posts: ${60*60}
+  process_posts: 1
+  process_messages: 1
+  post_expire: ${60*60*24*7}
+
+subreddits:
+  /r/gonewild:
+    pages: 2
+    charts:
+      - top
+      - hot
+    chat_id: "@gonewild_3f6g"
+  /r/nsfw:
+    pages: 2
+    charts:
+      - top
+      - hot
+    chat_id: "@nsfw_4fg6"
+  /r/NSFW_GIF:
+    pages: 2
+    charts:
+      - top
+      - hot
+    chat_id: "@nsfw_4fg6"
