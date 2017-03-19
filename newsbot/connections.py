@@ -58,7 +58,7 @@ class RedditSession(aiohttp.ClientSession):
             async for post in self._get_posts(subreddit, pages=pages, **kwargs):
                 yield post
 
-    async def get_posts(self, subreddit, charts=None, pages=1):
+    async def get_posts(self, subreddit, charts=None, pages=1, **kwargs):
         charts = charts or ['hot']
         for chart in charts:
             subreddit_chart = subreddit
