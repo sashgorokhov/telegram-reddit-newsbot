@@ -1,5 +1,6 @@
 telegram:
   token: ${env['TELEGRAM_TOKEN']}
+  chat_id:
 
 imgur:
   client_id: ${env['IMGUR_CLIENT_ID']}
