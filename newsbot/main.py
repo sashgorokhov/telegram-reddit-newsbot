@@ -14,6 +14,8 @@ def main(noserver=False):  # pragma: no cover
     kwargs = vars(parser.parse_args())
     settings.CONFIG = settings.read_config(kwargs.get('config', None))
     settings.CONFIG['redis'] = os.environ.get('REDIS_URL', kwargs.get('redis_url', None) or settings.CONFIG['redis'])
+    settings.CONFIG['telegram']['token'] = os.environ.get('TELEGRAM_TOKEN', settings.CONFIG['telegram']['token'])
+    settings.CONFIG['imgur']['client_id'] = os.environ.get('IMGUR_CLIENT_ID', settings.CONFIG['imgur']['client_id'])
 
     noserver = kwargs.get('noserver', noserver)
 
