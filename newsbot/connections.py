@@ -58,14 +58,14 @@ class RedditSession(aiohttp.ClientSession):
             async for post in self._get_posts(subreddit, pages=pages, **kwargs):
                 yield post
 
-    async def get_posts(self, subreddit, charts=None, pages=1, **kwargs):
+    async def get_posts(self, subreddit, charts=None, pages=1):
         charts = charts or ['hot']
         for chart in charts:
             subreddit_chart = subreddit
             if not subreddit_chart.endswith('/'):
                 subreddit_chart += '/'
             subreddit_chart += chart
-            async for post in self._get_posts(subreddit_chart, pages=pages, **kwargs):
+            async for post in self._get_posts(subreddit_chart, pages=pages):
                 yield post
 
 
