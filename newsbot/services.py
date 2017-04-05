@@ -16,12 +16,13 @@ async def filter_post(post, redis=None):
 
 async def gather_posts_loop(subreddits=None):  # pragma: no cover
     while True:
+        logger.info('Starting gather posts')
         try:
-            logger.info('Starting gather posts')
             await gather_posts(subreddits=subreddits)
         except:
             logger.exception('Error while gathering posts')
         finally:
+            logger.info('Finished gather posts')
             await asyncio.sleep(settings.CONFIG['timings']['gather_posts'])
 
 

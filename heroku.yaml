@@ -8,7 +8,7 @@ imgur:
 redis: ${env.get('REDIS_URL', 'redis://localhost:6379/0')}
 
 timings: # all values are seconds
-  gather_posts: ${60*1}
+  gather_posts: ${60*15}
   process_posts: 1
   process_messages: 1
   post_expire: ${60*60*24*7}

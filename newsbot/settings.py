@@ -1,4 +1,5 @@
 import os
+import sys
 
 import metayaml
 
@@ -19,7 +20,7 @@ def configure_logging():
 
     formatter = logging.Formatter('%(asctime)s [%(name)s:%(funcName)s] [%(levelname)s] %(message)s')
 
-    stream_handler = logging.StreamHandler()
+    stream_handler = logging.StreamHandler(stream=sys.stdout)
     stream_handler.setFormatter(formatter)
     stream_handler.setLevel(logging.DEBUG)
 
@@ -27,8 +28,6 @@ def configure_logging():
 
 
 configure_logging()
-
-del configure_logging
 
 USER_AGENT = 'Python reddit newsbot'
 POSTS_QUEUE_KEY = 'posts_queue'

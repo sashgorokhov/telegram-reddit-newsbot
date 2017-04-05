@@ -20,7 +20,7 @@ def main(noserver=False):  # pragma: no cover
 
     loop = asyncio.get_event_loop()
 
-    loop.create_task(services.gather_posts())
+    loop.create_task(services.gather_posts_loop())
     loop.create_task(services.process_posts_queue_loop())
     loop.create_task(services.process_messages_loop())
 
